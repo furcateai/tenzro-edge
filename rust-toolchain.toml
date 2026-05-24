@@ -1,0 +1,8 @@
+# Use whatever stable a contributor has. MSRV (1.95, current stable) is
+# asserted via the `rust-version` field in Cargo.toml — pinning a specific
+# stable channel here would force re-downloads on every dev box without
+# adding reproducibility guarantees (CI handles reproducibility).
+[toolchain]
+channel = "stable"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

@@ -1,0 +1,89 @@
+# SPDX-License-Identifier: Apache-2.0
+
+[workspace]
+resolver = "2"
+members = [
+    "crates/tenzro-edge-core",
+    "crates/tenzro-edge-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+license = "Apache-2.0"
+authors = ["Furcate Contributors"]
+homepage = "https://github.com/furcateai/tenzro-edge"
+repository = "https://github.com/furcateai/tenzro-edge"
+readme = "README.md"
+description = "Tier 2 OSS Pi-class Tenzro participation runtime — DPoP-bound JSON-RPC, attestation sinks, work brokers."
+keywords = ["tenzro", "blockchain", "dpop", "edge", "ledger"]
+categories = ["api-bindings", "cryptography", "command-line-utilities"]
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }
+module_name_repetitions = "allow"
+multiple_crate_versions = "allow"
+doc_markdown = "allow"
+
+[workspace.dependencies]
+# Tier 1 contract — pinned to a major version. Path deps during local
+# development; switch to crates.io versions on first publish.
+furcate-inference-core = { path = "../furcate-inference/crates/furcate-inference-core" }
+furcate-mesh-core      = { path = "../furcate-mesh/crates/furcate-mesh-core" }
+
+# Tenzro SDK — pinned to a specific rev until tagged release.
+#
+# Known gap (2026-05-23): the SDK pulls reqwest with default features,
+# which selects native-tls (OpenSSL). The Pi-class goal is rustls +
+# aws-lc-rs; achieving that requires the upstream SDK to expose TLS
+# feature flags. Tracked separately.
+tenzro-sdk = { git = "https://github.com/tenzro/tenzro-sdk-rust", rev = "536363b41c2a6e62ee387dcf6e26bbdcc3ade660" }
+
+# Async runtime — curated minimum features. The SDK pulls `tokio = "full"`
+# transitively, so the on-Pi footprint is whatever the SDK requires; this
+# block is what tenzro-edge code itself needs.
+tokio = { version = "1", default-features = false, features = ["rt", "net", "time", "sync", "macros", "fs", "rt-multi-thread"] }
+
+# Serde / error / tracing
+serde       = { version = "1", features = ["derive"] }
+serde_json  = "1"
+thiserror   = "1"
+tracing     = "0.1"
+async-trait = "0.1"
+futures     = "0.3"
+bytes       = { version = "1", features = ["serde"] }
+chrono      = { version = "0.4", default-features = false, features = ["std", "serde", "clock"] }
+blake3      = "1"
+hex         = "0.4"
+async-stream = "0.3"
+base64       = "0.22"
+
+# Direct HTTP RPC for DPoP-authenticated Tenzro calls. The SDK only forwards
+# DPoP proofs via env vars (mutation requires `unsafe` on edition 2024 and
+# serialises concurrent calls), so privileged receipt anchoring uses a
+# per-request explicit-headers path instead. Tracks the SDK's reqwest
+# version + default features so no second TLS backend is pulled in — the
+# `rustls` migration is gated on the SDK exposing TLS feature flags (see
+# `tenzro-sdk` block above).
+reqwest      = { version = "0.12", features = ["json"] }
+
+# Ed25519 holder key + DPoP proof minting. Tenzro testnet enforces
+# RFC 9449 §4: every privileged RPC requires a per-call DPoP proof
+# signed by the holder's Ed25519 key. The SDK forwards the proof from
+# the `TENZRO_DPOP_PROOF` env var; this crate owns minting it.
+ed25519-dalek = { version = "2", features = ["rand_core"] }
+sha2 = "0.10"
+rand_core = { version = "0.6", features = ["getrandom"] }
+
+# Local persistence (offline buffer + token cache)
+redb = "2"
+
+# CLI
+clap   = { version = "4", features = ["derive", "env"] }
+anyhow = "1"

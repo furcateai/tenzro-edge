@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: Apache-2.0
+
+[package]
+name = "tenzro-edge-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+description = "Pi-class Tenzro participation runtime — implements Furcate Tier-1 traits"
+
+[dependencies]
+furcate-inference-core.workspace = true
+furcate-mesh-core.workspace      = true
+tenzro-sdk.workspace             = true
+
+tokio.workspace        = true
+serde.workspace        = true
+serde_json.workspace   = true
+thiserror.workspace    = true
+tracing.workspace      = true
+async-trait.workspace  = true
+futures.workspace      = true
+bytes.workspace        = true
+chrono.workspace       = true
+redb.workspace         = true
+blake3.workspace       = true
+hex.workspace          = true
+async-stream.workspace = true
+base64.workspace       = true
+
+# DPoP proof minting (RFC 9449 §4) — Ed25519 keypair, JWK thumbprint
+# (RFC 7638), JWS-compact JWT signing. The Tenzro testnet enforces a
+# per-call DPoP proof on every privileged RPC; the SDK forwards it from
+# the `TENZRO_DPOP_PROOF` env var so we mint here and inject before the
+# call. See `auth.rs` for the design rationale.
+ed25519-dalek.workspace = true
+sha2.workspace          = true
+rand_core.workspace     = true
+
+# Direct HTTP RPC for the DPoP-authenticated receipt-sink path. See
+# `auth.rs` + `receipt_sink.rs` for the design.
+reqwest.workspace       = true
+
+[lints]
+workspace = true

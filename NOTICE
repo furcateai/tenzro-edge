@@ -1,0 +1,7 @@
+tenzro-edge
+Copyright 2026 Furcate Contributors
+
+This product includes software developed at Furcate (https://furcate.xyz).
+
+This software depends on tenzro-sdk-rust
+(https://github.com/tenzro/tenzro-sdk-rust), licensed under its own terms.
