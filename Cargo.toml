@@ -16,7 +16,7 @@ authors = ["Furcate Contributors"]
 homepage = "https://github.com/furcateai/tenzro-edge"
 repository = "https://github.com/furcateai/tenzro-edge"
 readme = "README.md"
-description = "Tier 2 OSS Pi-class Tenzro participation runtime — DPoP-bound JSON-RPC, attestation sinks, work brokers."
+description = "A Pi-class runtime for participating in the Tenzro Network — DPoP-bound JSON-RPC, attestation sinks, work brokers."
 keywords = ["tenzro", "blockchain", "dpop", "edge", "ledger"]
 categories = ["api-bindings", "cryptography", "command-line-utilities"]
 
