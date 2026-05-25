@@ -18,24 +18,6 @@ tenzro-edge status                          # token TTL + last sync
 tenzro-edge replay                          # flush offline-buffered events
 ```
 
----
-
-## Where it sits
-
-```
-github.com/furcateai/
-├── furcate-protocol                     wire-format specs + schemas
-├── furcate-inference                    edge inference kernel
-├── furcate-mesh                         LAN peer fabric for edge nodes
-├── minima-attest                        Rust client for anchoring hashes on a local Minima node
-├── tenzro-edge        ← you are here    runtime for participating in the Tenzro Network
-├── prvnz-edge                           runtime for issuing PRVNZ Digital Product Passports
-├── furcate-pi-hat                       Pi 5 HAT hardware support (GPIO, 1-Wire, OPC UA triggers)
-└── furcate-pi-minima                    supervisor for running a Minima full node on a Pi
-```
-
-`tenzro-edge` is the Tenzro-specific participation crate in this set. It provides reference impls for the Tenzro Network surface (identity, settlement, inference, model providing, storage, agent invocation) that any consumer of `furcate-inference` + `furcate-mesh` can wire in.
-
 ## What it does — and why
 
 Tenzro is a **global** network — identity, wallet, multi-VM coordination, inference, model providing, storage, training, settlement, agent payments (AP2), DIDs (TDIP). Furcate is the **edge** plane — Pi-class nodes that may be offline, intermittent, or LAN-only.
